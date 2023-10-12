@@ -3,7 +3,7 @@ import openai  # OpenAI GPT-3を使用するためのライブラリ
 # OpenAI GPT-3のAPIキーを設定
 openai.api_key = ''
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -11,6 +11,9 @@ app = Flask(__name__)
 shiritori_list = []
 num = 0
 text = ""
+
+@app.route('/')
+
 
 @app.route('/', methods=['GET', 'POST'])
 def shiritori():
@@ -40,6 +43,8 @@ def shiritori():
         if (japanese['choices'][0]['message']['content'] == "いいえ"):
             iie = "いいえ"
             shiritori_list.append(iie)
+            render_template('result.html', text = text)
+            # return redirect(url_for('result', text = text))
 
         # if num % 2 == 0:   
 
@@ -57,6 +62,11 @@ def shiritori():
 def user():
     # render_template('shiritori.html', shiritori_list=shiritori_list)
     render_template('response.html', shiritori_list=shiritori_list)
+
+@app.route('/result')
+def result(text):
+    render_template('result.html', text = text)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
