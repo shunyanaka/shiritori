@@ -1,9 +1,9 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = ''
+openai.api_key = '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'
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -13,6 +13,12 @@ num = 0
 text = ""
 
 @app.route('/', methods=['GET', 'POST'])
+def start():
+    if request.method == 'POST':
+        return redirect(url_for('shiritori'))
+    return render_template('start.html')
+
+@app.route('/shititori', methods=['GET', 'POST'])
 def shiritori():
     global num
     global text
