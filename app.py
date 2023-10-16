@@ -1,7 +1,7 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = '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'
 
 from flask import Flask, render_template, request, redirect, url_for
 
@@ -14,12 +14,17 @@ text = ""
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
+    #global shiritori_list  # グローバル変数を参照
+    #global num
+    #shiritori_list.clear()
+    #num = 0
     if request.method == 'POST':
         return redirect(url_for('shiritori'))
     return render_template('start.html')
 
 @app.route('/shititori', methods=['GET', 'POST'])
 def shiritori():
+    # global shiritori_list
     global num
     global text
     num += 1
@@ -44,8 +49,9 @@ def shiritori():
             ]   
         )
         if (japanese['choices'][0]['message']['content'] == "いいえ"):
-            iie = "いいえ"
-            shiritori_list.append(iie)
+            return render_template('result.html', text=text)
+            # iie = "いいえ"
+            # shiritori_list.append(iie)
 
         # if num % 2 == 0:   
 
