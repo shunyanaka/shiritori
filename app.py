@@ -12,6 +12,9 @@ shiritori_list = []
 num = 0
 text = ""
 
+@app.route('/')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def start():
     global shiritori_list  # グローバル変数を参照
@@ -69,6 +72,11 @@ def shiritori():
 def user():
     # render_template('shiritori.html', shiritori_list=shiritori_list)
     render_template('response.html', shiritori_list=shiritori_list)
+
+@app.route('/result')
+def result(text):
+    render_template('result.html', text = text)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
