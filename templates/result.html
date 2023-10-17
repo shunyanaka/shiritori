@@ -6,8 +6,9 @@
     <title>結果</title>
 </head>
 <body>
-    <h1>{{ text }}という日本語は存在しません</h1>
-    
+    <h1>失敗！{{ message }}</h1>
+    <h1>{{ num }}回しりとりを続けました！！</h1>
+
     <!-- やりなおすボタン -->
     <form action="{{ url_for('start') }}" method="GET">
         <button type="submit">やりなおす</button>
