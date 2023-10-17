@@ -13,5 +13,16 @@
     <form action="{{ url_for('start') }}" method="GET">
         <button type="submit">やりなおす</button>
     </form>
+
+    <!-- 吹き出しの表示 -->
+    <h2>履歴</h2>
+    <div style="overflow-y: scroll; max-height: 300px;">
+        {% for item in shiritori_list %}
+            <div style="border: 1px solid #ccc; margin: 5px; padding: 5px;">
+                {{ item }}
+            </div>
+        {% endfor %}
+    </div>
+
 </body>
 </html>
