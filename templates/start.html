@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>しりとりアプリスタート画面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>しりとりアプリ</h1>
+    <h1 class="centered-text">しりとりアプリ</h1>
     
     <!-- スタートボタン -->
-    <form method="POST">
-        <button type="submit">スタート</button>
+    <form method="POST" class="centered-form">
+        <button class="big-button" type="submit">スタート</button>
     </form>
 
-    <h2>スコアボード</h2>
-    <ul>
+    <h2 class="centered-text">スコアボード</h2>
+    <h3 class="centered-text">名前: 回数</h3>
+    <ul class="centered-ul">
         {% for player in players %}
-        <li>{{ player.name }}: {{ player.count }}回</li>
+            <li>{{ player.name }}: {{ player.count }}回</li>
         {% endfor %}
     </ul>
 </body>

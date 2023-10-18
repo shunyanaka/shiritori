@@ -1,7 +1,7 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = ''
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
