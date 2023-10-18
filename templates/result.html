@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>結果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>失敗！{{ message }}</h1>
@@ -25,7 +26,7 @@
     <h2>履歴</h2>
     <div style="overflow-y: scroll; max-height: 300px;">
         {% for item in shiritori_list %}
-            <div style="border: 1px solid #ccc; margin: 5px; padding: 5px;">
+            <div class="balloon {{ 'right' if loop.index % 2 == 1 else 'left' }}">
                 {{ item }}
             </div>
         {% endfor %}
