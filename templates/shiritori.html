@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>しりとりアプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>しりとりアプリ</h1>
@@ -15,9 +16,9 @@
     </form>
 
     <!-- 吹き出しの表示 -->
-    <div style="overflow-y: scroll; max-height: 300px;">
+    <div>
         {% for item in shiritori_list[-2:] %}
-            <div style="border: 1px solid #ccc; margin: 5px; padding: 5px;">
+            <div class="balloon {{ 'right' if loop.index0 == 0 else 'left' }}">
                 {{ item }}
             </div>
         {% endfor %}

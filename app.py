@@ -1,12 +1,10 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = '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'
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-
-# from your_flask_app import app  # あなたのFlaskアプリのインスタンスをインポート
 
 app = Flask(__name__)
 
@@ -108,7 +106,5 @@ def save_score():
     return redirect(url_for('start'))
 
 if __name__ == '__main__':
-    #with app.app_context():
-     #   db.create_all()
     app.run(debug=True)
 

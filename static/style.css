@@ -1,0 +1,16 @@
+/* 吹き出しのスタイルを定義 */
+.balloon {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 5px;
+}
+
+/* 右側の配置 */
+.balloon.right {
+    text-align: right;
+}
+
+/* 左側の配置 */
+.balloon.left {
+    text-align: left;
+}
