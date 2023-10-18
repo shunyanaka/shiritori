@@ -1,20 +1,34 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = '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'
 
 from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+
+# from your_flask_app import app  # あなたのFlaskアプリのインスタンスをインポート
 
 app = Flask(__name__)
+
+# データベースの設定
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shiritori.db'
+db = SQLAlchemy(app)
+
+# モデルの作成
+class Player(db.Model):
+    __tablename__="player"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    count = db.Column(db.Integer, nullable=False)
+
+with app.app_context():
+    db.create_all()
 
 # 吹き出しのリストを初期化
 shiritori_list = []
 num = 0
 text = ""
 pre_text = ""
-
-@app.route('/')
-
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
@@ -24,7 +38,8 @@ def start():
     num = 0
     if request.method == 'POST':
         return redirect(url_for('shiritori'))
-    return render_template('start.html')
+    players = Player.query.order_by(Player.count.desc()).all()
+    return render_template('start.html', players=players)
 
 @app.route('/shititori', methods=['GET', 'POST'])
 def shiritori():
@@ -34,8 +49,6 @@ def shiritori():
     global pre_text
 
     if request.method == 'POST':
-
-        # if num % 2 == 1:
 
         # フォームからテキストを取得
         text = request.form['text']
@@ -55,8 +68,6 @@ def shiritori():
         # テキストを吹き出しリストに追加
         shiritori_list.append(text)
 
-        # user()
-
         japanese = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -67,10 +78,6 @@ def shiritori():
         if (japanese['choices'][0]['message']['content'] == "いいえ"):
             message = f"「{text}」という言葉は存在しません！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
-            # iie = "いいえ"
-            # shiritori_list.append(iie)
-
-        # if num % 2 == 0:   
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -89,13 +96,19 @@ def shiritori():
 
     return render_template('shiritori.html', shiritori_list=shiritori_list,num=num)
 
-def user():
-    # render_template('shiritori.html', shiritori_list=shiritori_list)
-    render_template('response.html', shiritori_list=shiritori_list)
+@app.route('/save_score', methods=['POST'])
+def save_score():
+    player_name = request.form['player_name']
+    count = int(request.form['count'])
 
-@app.route('/result')
-def result(text):
-    render_template('result.html', text = text)
+    player = Player(name=player_name, count=count)
+    db.session.add(player)
+    db.session.commit()
+
+    return redirect(url_for('start'))
 
 if __name__ == '__main__':
+    #with app.app_context():
+     #   db.create_all()
     app.run(debug=True)
+

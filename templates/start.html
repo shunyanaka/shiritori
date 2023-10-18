@@ -12,5 +12,12 @@
     <form method="POST">
         <button type="submit">スタート</button>
     </form>
+
+    <h2>スコアボード</h2>
+    <ul>
+        {% for player in players %}
+        <li>{{ player.name }}: {{ player.count }}回</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
