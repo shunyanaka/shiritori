@@ -7,23 +7,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>失敗！{{ message }}</h1>
-    <h1>{{ num }}回しりとりを続けました！！</h1>
+    <h1 class="centered-text">{{ message }}</h1>
+    <h1 class="centered-text">{{ num }}回しりとりを続けました！！</h1>
 
-    <h1>名前を入力してください</h1>
-    <form action="{{ url_for('save_score') }}" method="POST">
-        <input type="text" name="player_name" required>
+    <form action="{{ url_for('save_score') }}" method="POST" class="centered-form">
+        <input class="big-input" type="text" name="player_name" placeholder="名前を入力してください" required>
         <input type="hidden" name="count" value="{{ num }}">
-        <button type="submit">結果を保存してやり直す</button>
+        <button class="big-button" type="submit">結果を保存してやり直す</button>
     </form>
 
     <!-- やりなおすボタン -->
-    <form action="{{ url_for('start') }}" method="GET">
-        <button type="submit">やりなおす</button>
+    <form action="{{ url_for('start') }}" method="GET" class="centered-form">
+        <button class="big-button margin-top-button" type="submit">結果を保存せずにやりなおす</button>
     </form>
 
     <!-- 吹き出しの表示 -->
-    <h2>履歴</h2>
+    <h2 class="centered-text">履歴</h2>
     <div style="overflow-y: scroll; max-height: 300px;">
         {% for item in shiritori_list %}
             <div class="balloon {{ 'right' if loop.index % 2 == 1 else 'left' }}">

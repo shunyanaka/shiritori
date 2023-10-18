@@ -3,6 +3,9 @@
     border: 1px solid #ccc;
     margin: 5px;
     padding: 5px;
+    max-width: 80%;
+    margin: 0 auto; /* 左右のマージンを自動にして中央寄せ */
+    display: block; /* ブロック要素として表示 */
 }
 
 /* 右側の配置 */
@@ -13,4 +16,47 @@
 /* 左側の配置 */
 .balloon.left {
     text-align: left;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.centered-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px; /* space between items */
+}
+
+.big-button {
+    padding: 5px 10px;
+    font-size: 18px;
+}
+
+.big-input {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+}
+
+.centered-ul {
+    list-style-position: inside;
+    text-align: center;
+    padding: 0;
+}
+
+.centered-ul li {
+    display: inline-block;
+    text-align: center;
+    width: 50%;
+}
+
+.margin-top-button {
+    margin-top: 20px;
+}
+
+/* 送信ボタンに下側にマージンを追加 */
+.margin-bottom-button {
+    margin-bottom: 20px; /* 20pxの間隔を追加。この値は希望の空間に合わせて調整してください */
 }
