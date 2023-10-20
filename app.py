@@ -1,7 +1,7 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = ''
+openai.api_key = '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'
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -77,18 +77,27 @@ def shiritori():
             message = f"「{text}」という言葉は存在しません！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-            # {"role": "system", "content": "あなたはしりとりをしています。与えられた言葉の最後の文字から始まる言葉を1つだけ述べてください。例えば「東京」が与えられたら、最後の文字である「う」から始まる言葉を述べてください。「」"},
-            {"role": "system", "content": "回答は全て平仮名にしてください。「ん」で終わる回答はしないでください。"},
-            {"role": "user", "content": f"「{text[-1]}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。「{text[-1]}」が小文字なら大文字に変換してください。漢字やカタカナではなく平仮名で答えてください。"}
-            # {"role": "user", "content": f"「{text}」の最後の文字から始まる言葉を1つだけ述べてください。例えば、「東京」ならば、「う」から始まる言葉です。ただし、最後の文字が小文字なら大文字に変換してください。また、「ん」で終わる言葉は避けてください。"}
-            ]   
-        )
-        shiritori_list.append(response['choices'][0]['message']['content'])
+        max_attempts = 3
+        attempts = 0
+        while attempts < max_attempts:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                # {"role": "system", "content": "あなたはしりとりをしています。与えられた言葉の最後の文字から始まる言葉を1つだけ述べてください。例えば「東京」が与えられたら、最後の文字である「う」から始まる言葉を述べてください。「」"},
+                {"role": "system", "content": "回答は全て平仮名にしてください。「ん」で終わる回答はしないでください。"},
+                {"role": "user", "content": f"「{text[-1]}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。「{text[-1]}」が小文字なら大文字に変換してください。漢字やカタカナではなく平仮名で答えてください。"}
+                # {"role": "user", "content": f"「{text}」の最後の文字から始まる言葉を1つだけ述べてください。例えば、「東京」ならば、「う」から始まる言葉です。ただし、最後の文字が小文字なら大文字に変換してください。また、「ん」で終わる言葉は避けてください。"}
+                ]   
+            )
+            res = response['choices'][0]['message']['content']
+            if res[-1] != 'ん' and res not in shiritori_list:
+                break
+            attempts += 1
 
-        pre_text = response['choices'][0]['message']['content']
+        shiritori_list.append(res)
+        # shiritori_list.append(response['choices'][0]['message']['content'])
+        pre_text = res
+        # pre_text = response['choices'][0]['message']['content']
 
         num+=1
 

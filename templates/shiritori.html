@@ -5,25 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>しりとりアプリ</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!--平仮名のみ受け付ける関数-->
+    <script>
+        function isHiragana(ch) {
+            return ch >= "ぁ" && ch <= "ん";
+        }
+    
+        function validateInput() {
+            const textbox = document.getElementById('input-text');
+            const submitButton = document.querySelector('.big-button');
+            const value = textbox.value;
+    
+            let isValid = true;
+            for (let i = 0; i < value.length; i++) {
+                if (!isHiragana(value[i])) {
+                    isValid = false;
+                    break;
+                }
+            }
+    
+            submitButton.disabled = !isValid || value.length === 0;
+        }
+    </script>
+    
 </head>
-<body>
-    <h1 class="centered-text">しりとりアプリ</h1>
+<body onload="validateInput()">
+
+    <h1 class="centered-text">平仮名しりとりアプリ</h1>
     <h2 class="centered-text">{{num}}回目</h2>
     
     <!-- テキスト入力フォーム -->
     <form method="POST" class="centered-form">
-        <input class="big-input" type="text" name="text" placeholder="テキストを入力">
-        <button class="big-button margin-bottom-button" type="submit">送信</button>
+        <input class="big-input" type="text" name="text" placeholder="テキストを入力" id="input-text" oninput="validateInput()">
+        <button class="big-button margin-bottom-button" type="submit" disabled>送信</button>
     </form>
 
-    <!-- 吹き出しの表示 -->
-    <div>
-        {% for item in shiritori_list[-2:] %}
-            <div class="balloon {{ 'right' if loop.index0 == 0 else 'left' }}">
-                {{ item }}
-            </div>
-        {% endfor %}
-    </div>
+    {% if shiritori_list %}
+        <h3 class="centered-text">
+            <span>相手</span>
+            <span class="spacer"></span>
+            <span>あなた</span>
+        </h3>
+    
+
+        <!-- 吹き出しの表示 -->
+        <div>
+            {% for item in shiritori_list[-2:] %}
+                <div class="balloon {{ 'right' if loop.index0 == 0 else 'left' }}">
+                    {{ item }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
 </body>
 </html>
