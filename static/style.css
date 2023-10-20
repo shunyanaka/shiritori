@@ -3,7 +3,7 @@
     border: 1px solid #ccc;
     margin: 5px;
     padding: 5px;
-    max-width: 80%;
+    max-width: 400px;
     margin: 0 auto; /* 左右のマージンを自動にして中央寄せ */
     display: block; /* ブロック要素として表示 */
 }
@@ -59,4 +59,9 @@
 /* 送信ボタンに下側にマージンを追加 */
 .margin-bottom-button {
     margin-bottom: 20px; /* 20pxの間隔を追加。この値は希望の空間に合わせて調整してください */
+}
+
+.spacer {
+    display: inline-block;
+    width: 200px;
 }
