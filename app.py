@@ -1,7 +1,7 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = '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'
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -21,6 +21,22 @@ class Player(db.Model):
 
 with app.app_context():
     db.create_all()
+
+# 小文字を大文字に変換する関数
+def convert_to_large_char(char):
+    small_to_large = {
+        "ぁ": "あ",
+        "ぃ": "い",
+        "ぅ": "う",
+        "ぇ": "え",
+        "ぉ": "お",
+        "っ": "つ",
+        "ゃ": "や",
+        "ゅ": "ゆ",
+        "ょ": "よ",
+        "ゎ": "わ",
+    }
+    return small_to_large.get(char, char) # 値のキーと存在しない場合のデフォルト値
 
 # 吹き出しのリストを初期化
 shiritori_list = []
@@ -52,15 +68,21 @@ def shiritori():
         text = request.form['text']
 
         if text[-1] == 'ん':
-            message = "「ん」で終わる言葉を使いました！"
+            message = "「ん」で終わる言葉を使ったよ！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
-        if num != 0 and text[0] != pre_text[-1]:
-            message = f"「{pre_text[-1]}」という文字から始めていません！"
+        # 前の「しり」の文字が小文字なら、大文字に変換
+        if num != 0:
+            char = convert_to_large_char(pre_text[-1])
+
+        # if num != 0 and text[0] != pre_text[-1]:
+        if num != 0 and text[0] != char:
+            # message = f"「{pre_text[-1]}」という文字から始めてないよ！"
+            message = f"「{char}」という文字から始めてないよ！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
         if text in shiritori_list:
-            message = f"「{text}」という言葉を使うのは二度目です！"
+            message = f"「{text}」という言葉を使うのは二度目だよ！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
         # テキストを吹き出しリストに追加
@@ -70,12 +92,15 @@ def shiritori():
             model="gpt-3.5-turbo",
             messages=[
             # {"role": "system", "content": "「はい」か「いいえ」のみで答えてください。"},
-            {"role": "user", "content": f"「{text}」という言葉は存在しますか。「はい」か「いいえ」のみで答えてください。"}
+            {"role": "user", "content": f"「{text}」という言葉は存在しますか。「はい」か「いいえ」のみで答えてください。ただし、漢字やカタカナが平仮名で入力されている可能性を考慮してください。"}
             ]   
         )
         if (japanese['choices'][0]['message']['content'] == "いいえ"):
-            message = f"「{text}」という言葉は存在しません！"
+            message = f"まもるくんは「{text}」という言葉を知らないよ！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
+
+        # 「しり」の文字が小文字なら、大文字に変換
+        shiri = convert_to_large_char(text[-1])
 
         max_attempts = 3
         attempts = 0
@@ -84,8 +109,9 @@ def shiritori():
                 model="gpt-3.5-turbo",
                 messages=[
                 # {"role": "system", "content": "あなたはしりとりをしています。与えられた言葉の最後の文字から始まる言葉を1つだけ述べてください。例えば「東京」が与えられたら、最後の文字である「う」から始まる言葉を述べてください。「」"},
-                {"role": "system", "content": "回答は全て平仮名にしてください。「ん」で終わる回答はしないでください。"},
-                {"role": "user", "content": f"「{text[-1]}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。「{text[-1]}」が小文字なら大文字に変換してください。漢字やカタカナではなく平仮名で答えてください。"}
+                {"role": "system", "content": "回答は全て平仮名にしてください。「ん」で終わる回答はしないでください。1つの単語のみを平仮名で回答してください。"},
+                # {"role": "user", "content": f"「{text[-1]}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。「{text[-1]}」が小文字なら大文字に変換してください。漢字やカタカナではなく平仮名で答えてください。"}
+                {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。「{shiri}漢字やカタカナではなく平仮名で答えてください。"}
                 # {"role": "user", "content": f"「{text}」の最後の文字から始まる言葉を1つだけ述べてください。例えば、「東京」ならば、「う」から始まる言葉です。ただし、最後の文字が小文字なら大文字に変換してください。また、「ん」で終わる言葉は避けてください。"}
                 ]   
             )
@@ -93,6 +119,10 @@ def shiritori():
             if res[-1] != 'ん' and res not in shiritori_list:
                 break
             attempts += 1
+
+        if attempts == 3:
+            message = f"まもるくんは次の言葉が思い浮かばないよ！"
+            return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
         shiritori_list.append(res)
         # shiritori_list.append(response['choices'][0]['message']['content'])
@@ -116,4 +146,3 @@ def save_score():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
