@@ -6,22 +6,25 @@
     <title>結果</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
+    <!-- しりとり終了の理由と結果の表示 -->
     <h1 class="centered-text">{{ message }}</h1>
     <h1 class="centered-text">結果：{{ num }}回</h1>
 
+    <!-- 結果を保存する場合、名前を入力してデータベースに保存してスタート画面へ -->
     <form action="{{ url_for('save_score') }}" method="POST" class="centered-form">
         <input class="big-input" type="text" name="player_name" placeholder="名前を入力してください" required>
         <input type="hidden" name="count" value="{{ num }}">
         <button class="big-button" type="submit">結果を保存してもう一度！</button>
     </form>
 
-    <!-- やりなおすボタン -->
+    <!-- 結果を保存しない場合、そのままスタート画面へ -->
     <form action="{{ url_for('start') }}" method="GET" class="centered-form">
         <button class="big-button margin-top-button" type="submit">結果を保存せずにもう一度！</button>
     </form>
 
-    <!-- 吹き出しの表示 -->
+    <!-- 会話の履歴を全て表示 -->
     <h2 class="centered-text">履歴</h2>
     <div style="overflow-y: scroll; max-height: 300px;">
         {% for item in shiritori_list %}
