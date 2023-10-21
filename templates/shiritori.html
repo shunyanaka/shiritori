@@ -6,7 +6,7 @@
     <title>しりとりアプリ</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    <!--平仮名のみ受け付ける関数-->
+    <!-- 入力時に平仮名のみ受け付ける処理 -->
     <script>
         function isHiragana(ch) {
             return (ch >= "ぁ" && ch <= "ん") || ch == 'ー';
@@ -24,7 +24,6 @@
                     break;
                 }
             }
-    
             submitButton.disabled = !isValid || value.length === 0;
         }
     </script>
@@ -35,21 +34,20 @@
     <h1 class="centered-text">平仮名しりとりアプリ</h1>
     <h2 class="centered-text">{{num}}回目</h2>
     
-    <!-- テキスト入力フォーム -->
+    <!-- テキスト入力フォームと送信ボタン -->
     <form method="POST" class="centered-form">
-        <input class="big-input" type="text" name="text" placeholder="テキストを入力" id="input-text" oninput="validateInput()">
+        <input class="big-input" type="text" name="text" placeholder="回答を入力" id="input-text" oninput="validateInput()">
         <button class="big-button margin-bottom-button" type="submit" disabled>送信</button>
     </form>
 
+    <!-- ２回目以降の会話ならば、履歴を表示 -->
     {% if shiritori_list %}
         <h3 class="centered-text">
             <span>まもる</span>
             <span class="spacer"></span>
             <span>あなた</span>
         </h3>
-    
-
-        <!-- 吹き出しの表示 -->
+        <!-- 最新の２回分表示 -->
         <div>
             {% for item in shiritori_list[-2:] %}
                 <div class="balloon {{ 'right' if loop.index0 == 0 else 'left' }}">

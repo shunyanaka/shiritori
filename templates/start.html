@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- 概要を説明 -->
     <h1 class="centered-text">平仮名しりとりアプリ</h1>
     <h2 class="centered-text">「まもる」くんとしりとりをしよう！</h2>
     <h2 class="centered-text">「まもる」くんは５歳なので、平仮名で送信してね！</h2>
@@ -16,10 +17,12 @@
         <button class="big-button" type="submit">スタート</button>
     </form>
 
+    <!-- ルール説明 -->
     <h2 class="centered-text">ルール</h2>
     <h3 class="centered-text">同じ言葉は２回使わない！</h3>
     <h3 class="centered-text">最後が「ん」の言葉を使わない！</h3>
 
+    <!-- データベースに記録した内容を記述 -->
     <h2 class="centered-text">スコアボード</h2>
     <h3 class="centered-text">名前: 回数</h3>
     <ul class="centered-ul">
