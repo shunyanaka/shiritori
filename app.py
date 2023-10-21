@@ -1,7 +1,8 @@
 import openai  # OpenAI GPT-3を使用するためのライブラリ
+import re
 
 # OpenAI GPT-3のAPIキーを設定
-openai.api_key = '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'
+openai.api_key = ''
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -38,6 +39,17 @@ def convert_to_large_char(char):
     }
     return small_to_large.get(char, char) # 値のキーと存在しない場合のデフォルト値
 
+# 末尾の文字（ーを無視）を取得する
+def get_last_character(string):
+    # 文字列が「ー」だけで構成されている場合、Noneを返す
+    #if re.fullmatch(r"ー+", string):
+    #    return None
+
+    match = re.search(r"([^ー])ー*$", string)
+    if match:
+        return match.group(1)
+    return None
+
 # 吹き出しのリストを初期化
 shiritori_list = []
 num = 0
@@ -67,7 +79,13 @@ def shiritori():
         # フォームからテキストを取得
         text = request.form['text']
 
-        if text[-1] == 'ん':
+        tail = get_last_character(text)
+        if tail == None:
+            message = f"まもるくんは「{text}」という言葉を知らないよ！"
+            return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
+
+        # if text[-1] == 'ん':
+        if tail == 'ん':
             message = "「ん」で終わる言葉を使ったよ！"
             return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
