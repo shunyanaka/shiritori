@@ -9,7 +9,7 @@
     <!--平仮名のみ受け付ける関数-->
     <script>
         function isHiragana(ch) {
-            return ch >= "ぁ" && ch <= "ん";
+            return (ch >= "ぁ" && ch <= "ん") || ch == 'ー';
         }
     
         function validateInput() {
