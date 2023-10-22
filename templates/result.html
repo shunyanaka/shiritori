@@ -26,6 +26,11 @@
 
     <!-- 会話の履歴を全て表示 -->
     <h2 class="centered-text">履歴</h2>
+    <h3 class="centered-text">
+        <span>まもる</span>
+        <span class="spacer"></span>
+        <span>あなた</span>
+    </h3>
     <div style="overflow-y: scroll; max-height: 300px;">
         {% for item in shiritori_list %}
             <div class="balloon {{ 'right' if loop.index % 2 == 1 else 'left' }}">

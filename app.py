@@ -47,7 +47,9 @@ def convert_to_large_char(char):
 
 # 「ー」の文字を無視して末尾の文字を取得する
 def get_last_character(string):
-    match = re.search(r"([^ー])ー*$", string)
+    #match = re.search(r"([^ー])ー*$", string)
+    #match = re.search(r"([^ー])ー*$", string)
+    match = re.search(r"([^ー」])ー*」*$", string)
     if match:
         return match.group(1)
     return None
@@ -108,16 +110,18 @@ def shiritori():
             return render_template('result.html', num=session['num'], message=message,shiritori_list=session['shiritori_list'])
             #return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
+        char1 = get_last_character(session['pre_text'])
+
         # 相手の「しり」の文字が小文字なら、大文字に変換（２回目以降）
         #if num != 0:
         if session['num'] != 0:
             #char = convert_to_large_char(pre_text[-1])
-            char = convert_to_large_char(session['pre_text'][-1])
+            char2 = convert_to_large_char(char1)
 
         # 言葉の「しり」を取っていなければしりとり終了
         #if num != 0 and text[0] != char:
-        if session['num'] != 0 and text[0] != char:
-            message = f"「{char}」という文字から始めてないよ！"
+        if session['num'] != 0 and text[0] != char2:
+            message = f"「{char2}」という文字から始めてないよ！"
             return render_template('result.html', num=session['num'], message=message,shiritori_list=session['shiritori_list'])
             #return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
@@ -158,7 +162,7 @@ def shiritori():
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                {"role": "system", "content": "1つの単語のみを平仮名で回答してください。"},
+                {"role": "system", "content": "1つの単語のみを平仮名で回答してください。「」の記号は使わないでください"},
                 {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
                 ]   
             )
@@ -176,7 +180,7 @@ def shiritori():
 
         # AIの回答を履歴に追加
         #shiritori_list.append(res)
-        session['shiritori_list'].extend([text, res])
+        session['shiritori_list'].extend([res])
 
         # AIの解答を記録
         #pre_text = res
