@@ -6,7 +6,7 @@
 「まもるくんの回答」や、「ユーザの回答が言葉として存在するのか」の判定は全てChatGPTで処理している。
 
 ## 使用技術
-Python、Flask、HTML、CSS、SQLite、ChatGPT
+Python、Flask、HTML、CSS、PostgreSQL(SQLite)、ChatGPT
 
 ## 画面の構成
 
