@@ -15,7 +15,12 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 # データベースの設定
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shiritori.db'
+DATABASE_URI = os.environ.get('DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+
+# SQLiteの場合
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shiritori.db'
+
 db = SQLAlchemy(app)
 
 # データベースのモデルの作成
