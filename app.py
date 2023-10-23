@@ -59,6 +59,10 @@ def get_last_character(string):
         return match.group(1)
     return None
 
+# 平仮名かどうかを判定
+def is_hiragana(s):
+    return bool(re.fullmatch(r'[ぁ-ん]+', s))
+
 # しりとりのセッションをリセットするヘルパー関数
 def reset_shiritori_session():
     session['shiritori_list'] = []
@@ -168,7 +172,7 @@ def shiritori():
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                {"role": "system", "content": "1つの単語のみを平仮名で回答してください。"},
+                {"role": "system", "content": "あなたは平仮名しか使えません。あなたは10文字以上喋れません。"},
                 {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
                 ]   
             )
@@ -178,7 +182,7 @@ def shiritori():
 
             #if res[-1] != 'ん' and res not in shiritori_list:
             #if res[-1] != 'ん' and res not in session['shiritori_list']:
-            if session['pre_text'] != 'ん' and res not in session['shiritori_list']:
+            if session['pre_text'] != 'ん' and res not in session['shiritori_list'] and is_hiragana(session['pre_text']) and len(res) <= 10:
                 break
             attempts += 1
 
