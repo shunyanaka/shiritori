@@ -1,20 +1,33 @@
+/* フォント、基本の背景、テキストカラーの設定 */
+body {
+    font-family: 'Noto Sans JP', sans-serif; /* Google Fontsで利用可能なフォント */
+    background-color: #fff5c7;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
 /* 吹き出しのスタイルを定義 */
 .balloon {
-    border: 1px solid #ccc;
-    margin: 5px;
-    padding: 5px;
+    border-radius: 8px;
+    margin: 10px auto;
+    padding: 10px;
     max-width: 400px;
-    margin: 0 auto; /* 左右のマージンを自動にして中央寄せ */
-    display: block; /* ブロック要素として表示 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 右側の配置 */
 .balloon.right {
+    background-color: #003cff;
+    color: #fff;
     text-align: right;
 }
 
 /* 左側の配置 */
 .balloon.left {
+    background-color: #ff0000b4;
+    color: #fff;
     text-align: left;
 }
 
@@ -29,15 +42,35 @@
     gap: 16px; /* space between items */
 }
 
+/* ボタンの大きなサイズ */
 .big-button {
-    padding: 5px 10px;
+    padding: 10px 20px;
     font-size: 18px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
+.big-button:disabled {
+    background-color: #ccc; /* 灰色にする */
+    cursor: not-allowed;    /* カーソルを禁止マークに変更する */
+}
+
+
+.big-button:hover {
+    background-color: #2980b9;
+}
+
+/* インプットフィールドの大きなサイズ */
 .big-input {
     padding: 10px;
     font-size: 16px;
     width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .centered-ul {
@@ -50,18 +83,58 @@
     display: inline-block;
     text-align: center;
     width: 50%;
+    font-weight: bold;
 }
 
+/* ボタンの上側にマージンを追加 */
 .margin-top-button {
     margin-top: 20px;
 }
 
 /* 送信ボタンに下側にマージンを追加 */
 .margin-bottom-button {
-    margin-bottom: 20px; /* 20pxの間隔を追加。この値は希望の空間に合わせて調整してください */
+    margin-bottom: 20px;
 }
 
 .spacer {
     display: inline-block;
     width: 200px;
+}
+
+/* セクションのスタイル */
+.section1 {
+    padding: 20px;
+    margin: 10px auto;
+    max-width: 600px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* セクションの見出し */
+.section1 h2 {
+    border-bottom: 2px solid #e1e1e1;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* セクションのスタイル */
+.section2 {
+    padding: 20px;
+    margin: 10px auto;
+    max-width: 600px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* セクションの見出し */
+.section2 h1 {
+    border-bottom: 2px solid #e1e1e1;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 30px;       /* フォントサイズを大きく */
+    font-weight: bold;     /* フォントを太く */
 }

@@ -110,13 +110,14 @@ def shiritori():
             return render_template('result.html', num=session['num'], message=message,shiritori_list=session['shiritori_list'])
             #return render_template('result.html', num=num, message=message,shiritori_list=shiritori_list)
 
-        char1 = get_last_character(session['pre_text'])
+        #char1 = get_last_character(session['pre_text'])
 
         # 相手の「しり」の文字が小文字なら、大文字に変換（２回目以降）
         #if num != 0:
         if session['num'] != 0:
             #char = convert_to_large_char(pre_text[-1])
-            char2 = convert_to_large_char(char1)
+            #char2 = convert_to_large_char(char1)
+            char2 = convert_to_large_char(session['pre_text'])
 
         # 言葉の「しり」を取っていなければしりとり終了
         #if num != 0 and text[0] != char:
@@ -162,13 +163,17 @@ def shiritori():
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                {"role": "system", "content": "1つの単語のみを平仮名で回答してください。「」の記号は使わないでください"},
+                {"role": "system", "content": "1つの単語のみを平仮名で回答してください。"},
                 {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
                 ]   
             )
             res = response['choices'][0]['message']['content']
+
+            session['pre_text'] = get_last_character(res)
+
             #if res[-1] != 'ん' and res not in shiritori_list:
-            if res[-1] != 'ん' and res not in session['shiritori_list']:
+            #if res[-1] != 'ん' and res not in session['shiritori_list']:
+            if session['pre_text'] != 'ん' and res not in session['shiritori_list']:
                 break
             attempts += 1
 
@@ -184,7 +189,7 @@ def shiritori():
 
         # AIの解答を記録
         #pre_text = res
-        session['pre_text'] = res
+        #session['pre_text'] = res
 
         # しりとりの回数をインクリメント
         #num+=1

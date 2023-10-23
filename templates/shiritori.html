@@ -24,7 +24,13 @@
                     break;
                 }
             }
-            submitButton.disabled = !isValid || value.length === 0;
+            //submitButton.disabled = !isValid || value.length === 0;
+            // ボタンが有効/無効に応じて、スタイルを変更
+            if (isValid && value.length !== 0) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
         }
     </script>
     
