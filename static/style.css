@@ -31,10 +31,12 @@ body {
     text-align: left;
 }
 
+/* 真ん中に配置 */
 .centered-text {
     text-align: center;
 }
 
+/* ボタン内の文字の位置調整 */
 .centered-form {
     display: flex;
     flex-direction: column;
@@ -54,15 +56,25 @@ body {
     transition: background-color 0.3s;
 }
 
+/* 平仮名以外の送信 */
 .big-button:disabled {
     background-color: #ccc; /* 灰色にする */
     cursor: not-allowed;    /* カーソルを禁止マークに変更する */
 }
 
-
 .big-button:hover {
     background-color: #2980b9;
 }
+
+/* 結果を保存せずにもう一度！ボタンのスタイル */
+.retry-button {
+    background-color: #ff8c00; /* 緑色に変更 */
+}
+
+.retry-button:hover {
+    background-color: #cd6d00; /* ホバー時に少し暗く */
+}
+
 
 /* インプットフィールドの大きなサイズ */
 .big-input {
@@ -137,4 +149,24 @@ body {
     margin-bottom: 15px;
     font-size: 30px;       /* フォントサイズを大きく */
     font-weight: bold;     /* フォントを太く */
+}
+
+.centered-table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.scoreboard-table {
+    border-collapse: collapse;
+    width: 60%;
+}
+
+.scoreboard-table th, .scoreboard-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+.scoreboard-table th {
+    background-color: #f2f2f2;
 }
