@@ -29,12 +29,22 @@
     <!-- データベースに記録した内容を記述 -->
     <section class="section1">
         <h2 class="centered-text">スコアボード</h2>
-        <h3 class="centered-text">名前: 回数</h3>
-        <ul class="centered-ul">
-            {% for player in players %}
-                <li>{{ player.name }}: {{ player.count }}回</li>
-            {% endfor %}
-        </ul>
-    </section>
+        <table class="scoreboard-table centered-table">
+            <thead>
+                <tr>
+                    <th>名前</th>
+                    <th>点数</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                    <tr>
+                        <td>{{ player.name }}</td>
+                        <td>{{ player.count }}回</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>    
 </body>
 </html>
