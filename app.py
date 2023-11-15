@@ -1,12 +1,16 @@
 # ライブラリインストール
-import openai
+# import openai
+from openai import AsyncOpenAI, OpenAI
 import re, os
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
 # OpenAI GPT-3のAPIキーを環境変数から設定
-openai.api_key = os.environ.get('OPENAI_API_KEY')
-if not openai.api_key:
+# openai.api_key = os.environ.get('OPENAI_API_KEY')
+client = OpenAI(
+  api_key=os.environ['OPENAI_API_KEY'],  # this is also the default, it can be omitted
+)
+if not client.api_key:
     raise ValueError("APIキーが設定されていません。環境変数OPENAI_API_KEYを確認してください。")
 
 app = Flask(__name__)
@@ -119,7 +123,8 @@ def shiritori():
         session['shiritori_list'].append(text)
 
         # ユーザの回答が言葉として存在するかを判定
-        japanese = openai.ChatCompletion.create(
+        # japanese = openai.ChatCompletion.create(
+        japanese = client.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
             # {"role": "system", "content": ""},
@@ -128,7 +133,8 @@ def shiritori():
         )
 
         # ユーザの回答が言葉として存在しない場合、しりとり終了
-        if (japanese['choices'][0]['message']['content'] == "いいえ"):
+        # if (japanese['choices'][0]['message']['content'] == "いいえ"):
+        if japanese.choices[0].message.content == "いいえ":
             message = f"まもるくんは「{text}」という言葉を知らないよ！"
             return render_template('result.html', num=session['num'], message=message,shiritori_list=session['shiritori_list'])
 
@@ -139,14 +145,16 @@ def shiritori():
         max_attempts = 3
         attempts = 0
         while attempts < max_attempts:
-            response = openai.ChatCompletion.create(
+            # response = openai.ChatCompletion.create(
+            response = client.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                 {"role": "system", "content": "あなたは平仮名しか使えません。あなたは10文字以上喋れません。"},
                 {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
                 ]   
             )
-            res = response['choices'][0]['message']['content']
+            # res = response['choices'][0]['message']['content']
+            res = response.choices[0].message.content
 
             session['pre_text'] = get_last_character(res)
 
