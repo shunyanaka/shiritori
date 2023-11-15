@@ -1,6 +1,6 @@
 # ライブラリインストール
 # import openai
-from openai import AsyncOpenAI, OpenAI
+from openai import OpenAI
 import re, os
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 # OpenAI GPT-3のAPIキーを環境変数から設定
 # openai.api_key = os.environ.get('OPENAI_API_KEY')
 client = OpenAI(
-  api_key=os.environ['OPENAI_API_KEY'],  # this is also the default, it can be omitted
+  api_key=os.environ['OPENAI_API_KEY'],
 )
 if not client.api_key:
     raise ValueError("APIキーが設定されていません。環境変数OPENAI_API_KEYを確認してください。")
@@ -124,12 +124,17 @@ def shiritori():
 
         # ユーザの回答が言葉として存在するかを判定
         # japanese = openai.ChatCompletion.create(
-        japanese = client.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        # client = AsyncOpenAI()
+        japanese = client.chat.completions.create(
             messages=[
+                {
+                    "role": "user",
+                    "content": f"「{text}」という言葉は存在しますか。「はい」か「いいえ」のみで答えてください。ただし、漢字やカタカナが平仮名で入力されている可能性を考慮してください。",
             # {"role": "system", "content": ""},
-            {"role": "user", "content": f"「{text}」という言葉は存在しますか。「はい」か「いいえ」のみで答えてください。ただし、漢字やカタカナが平仮名で入力されている可能性を考慮してください。"}
-            ]   
+            # {"role": "user", "content": f"「{text}」という言葉は存在しますか。「はい」か「いいえ」のみで答えてください。ただし、漢字やカタカナが平仮名で入力されている可能性を考慮してください。"}
+                }
+            ],  
+            model="gpt-3.5-turbo",
         )
 
         # ユーザの回答が言葉として存在しない場合、しりとり終了
@@ -146,12 +151,17 @@ def shiritori():
         attempts = 0
         while attempts < max_attempts:
             # response = openai.ChatCompletion.create(
-            response = client.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+            response = client.chat.completions.create(
+                # model="gpt-3.5-turbo",
                 messages=[
-                {"role": "system", "content": "あなたは平仮名しか使えません。あなたは10文字以上喋れません。"},
-                {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
-                ]   
+                    {
+                        "role": "user",
+                        "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。10文字以上話さないでください。"
+                    }
+                # {"role": "system", "content": "あなたは平仮名しか使えません。あなたは10文字以上喋れません。"},
+                # {"role": "user", "content": f"「{shiri}」から始まる単語を1つだけ述べてください。ただし、「ん」で終わる回答はやめてください。漢字やカタカナではなく平仮名で答えてください。"}
+                ],
+                model="gpt-3.5-turbo",
             )
             # res = response['choices'][0]['message']['content']
             res = response.choices[0].message.content
